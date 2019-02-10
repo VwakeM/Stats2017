@@ -1,19 +1,11 @@
-#Set working directory. 
-setwd("C:/Users/student/Desktop/vivek/Statistics 2017 SMSC/")
-source("R_scripts/functions/pairsPannelFunctions.r")
+source("pairsPannelFunctions.r")
 
-#read table
-bee_data <- read.table("data/urbanBees_preprocessed.txt", header= TRUE)
-
-#Data scans
-summary(bee_data)
-
-# view data shows the missing data. 
-View(bee_data)
-names(bee_data)
+#Read data
+bee_data <- read.table("urbanBees_preprocessed.txt", header= TRUE)
 
 pairs(bee_data[,1:13], lower.panel = panel.smooth, diag.panel = panel.hist, upper.panel = panel.cor)
 
+# Set NAs to 0.
 bee_data$or_chambers <-  ifelse(is.na(bee_data$or_chambers), 0, bee_data$or_chambers)
 
 plot(x = bee_data$share_int, y = bee_data$or_chambers)
@@ -59,9 +51,6 @@ summary(glm_pos_multi)
 drop1(glm_pos_multi)
 
 1 - glm_pos_multi$deviance/glm_pos_multi$null.deviance
-
-
-
 
 # Trial for quasi-possion
 #g_bee_qpos  <- glm(or_chambers ~ juliandays.t + share_int + hang_location.t + hang_location_sp.t + shade.t + flowers_100m, data = bee_data, family= quasipoisson )
@@ -112,7 +101,7 @@ require(faraway)
 cooks_bees <- cooks.distance(glm_pos_multi)
 halfnorm(cooks_bees)
 
-?halfnorm
+#?halfnorm
 
 plot(residuals(glm_pos_multi) ~ fitted(glm_pos_multi), bg = "blue", ylab = "Residuals" , xlab = "Fitted", las = 1) 
 
